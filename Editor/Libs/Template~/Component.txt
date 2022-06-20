@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------
+--                    GNU GENERAL PUBLIC LICENSE                       --
+--                       Version 2, June 1991                          --
+--                                                                     --
+-- Copyright (C) Wells Hsu, wellshsu@outlook.com, All rights reserved. --
+-- Everyone is permitted to copy and distribute verbatim copies        --
+-- of this license document, but changing it is not allowed.           --
+--                  SEE LICENSE.md FOR MORE DETAILS.                   --
+-------------------------------------------------------------------------
+---@class #NAME#
+---@field transform UnityEngine.Transform
+---@field gameObject UnityEngine.GameObject
+---@field enabled boolean
+#NAME# = CLASS {}
+
+---@protected
+function #NAME#:Awake()
+end
+
+---@protected
+function #NAME#:OnEnable()
+end
+
+---@protected
+function #NAME#:Start()
+end
+
+---@protected
+function #NAME#:OnDisable()
+end
+
+---@protected
+function #NAME#:OnDestroy()
+end

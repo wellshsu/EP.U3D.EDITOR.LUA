@@ -1,0 +1,21 @@
+{
+  "name": "ep.u3d.editor.lua",
+  "displayName": "EP.U3D.EDITOR.LUA",
+  "description": "Lua editor.",
+  "version": "0.0.1",
+  "unity": "2019.2",
+  "unityRelease": "0a12",
+  "relatedPackages": {},
+  "upmCi": {},
+  "repository": {
+    "url": "https://github.com/wellshsu/EP.U3D.EDITOR.LUA.git",
+    "type": "git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Wells Hsu",
+    "email": "wellshsu@outlook.com",
+    "url": "https://github.com/wellshsu"
+  },
+  "type": "tool"
+}

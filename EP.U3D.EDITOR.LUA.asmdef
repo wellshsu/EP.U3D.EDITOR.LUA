@@ -1,0 +1,21 @@
+{
+    "name": "EP.U3D.EDITOR.LUA",
+    "rootNamespace": "",
+    "references": [
+        "EP.U3D.EDITOR.BASE",
+        "EP.U3D.LIBRARY.LUA",
+        "EP.U3D.LIBRARY.BASE",
+        "EP.U3D.RUNTIME.LUA"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
