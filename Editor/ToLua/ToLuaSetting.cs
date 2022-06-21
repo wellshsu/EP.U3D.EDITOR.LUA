@@ -43,6 +43,6 @@ namespace LuaInterface.Editor
         public static List<string> MemberFilter = new List<string>();
 
         //类型别名，用于生成api快速访问
-        public static Dictionary<string, string> ClassAlias = new();
+        public static Dictionary<string, string> ClassAlias = new Dictionary<string, string>();
     }
 }
