@@ -27,9 +27,7 @@ namespace EP.U3D.EDITOR.LUA
         public string[] mLuaScripts;
         private string mLuaProjRoot;
         private int mSelectedScript = -1;
-        private Assembly mMainDLL;
-        private Assembly mUnityDLL;
-        private Assembly mUnityUIDLL;
+        private string mSearchText;
         private readonly Dictionary<string, string> mReflects = new Dictionary<string, string>();
         private readonly string mHelpText =
             "USE @inspector to inspect property\n" +
@@ -43,9 +41,6 @@ namespace EP.U3D.EDITOR.LUA
         private void OnEnable()
         {
             mInstance = target as LuaComponent;
-            mMainDLL = Assembly.GetAssembly(Constants.CSHAP_DLL);
-            mUnityDLL = Assembly.GetAssembly(typeof(GameObject));
-            mUnityUIDLL = Assembly.GetAssembly(typeof(UnityEngine.UI.Image));
             mLuaProjRoot = Constants.LUA_SCRIPT_WORKSPACE;
             List<string> scripts = new List<string>();
             CollectScripts(mLuaProjRoot, scripts);
@@ -198,9 +193,20 @@ namespace EP.U3D.EDITOR.LUA
                             }
                             else
                             {
-                                Type ftype = mUnityDLL.GetType(field.Value);
-                                if (ftype == null) ftype = mUnityUIDLL.GetType(field.Value);
-                                if (ftype == null) ftype = mMainDLL.GetType(field.Value);
+                                Type ftype = null;
+                                for (int i = 0; i < Constants.COMPONENT_REFLECT_DLLS.Count; i++)
+                                {
+                                    var dll = Constants.COMPONENT_REFLECT_DLLS[i];
+                                    if (dll != null)
+                                    {
+                                        var t = dll.GetType(field.Value);
+                                        if (t != null)
+                                        {
+                                            ftype = t;
+                                            break;
+                                        }
+                                    }
+                                }
                                 if (ftype != null && ftype.IsSubclassOf(typeof(UnityEngine.Object)))
                                 {
                                     UnityEngine.Object v = mInstance.Object.RawGet<string, UnityEngine.Object>(field.Key);
@@ -233,18 +239,24 @@ namespace EP.U3D.EDITOR.LUA
             }
             else
             {
+                mSearchText = EditorGUILayout.TextField("Search Script", mSearchText);
+                if (!string.IsNullOrEmpty(mSearchText))
+                {
+                    for (int i = 0; i < mLuaScripts.Length; i++)
+                    {
+                        var str = mLuaScripts[i];
+                        if (str.IndexOf(mSearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            if (GUILayout.Button(new GUIContent(str)))
+                            {
+                                mSelectedScript = i;
+                            }
+                        }
+                    }
+                }
+                GUILayout.Space(4);
                 GUILayout.BeginHorizontal();
                 mSelectedScript = EditorGUILayout.IntPopup(mSelectedScript, mLuaScripts, null, GUILayout.Height(15));
-                if (mSelectedScript != -1)
-                {
-                    string path = mLuaScripts[mSelectedScript];
-                    path = path.Replace(".lua", "");
-                    path = path.Replace("/", ".");
-                    string module = path.Substring(0, path.LastIndexOf("."));
-                    string script = path.Substring(path.LastIndexOf(".") + 1);
-                    mInstance.Module = module;
-                    mInstance.Script = script;
-                }
                 if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Height(17), GUILayout.Width(50)))
                 {
                     string path = mLuaScripts[mSelectedScript];
@@ -258,6 +270,14 @@ namespace EP.U3D.EDITOR.LUA
                 }
                 else
                 {
+                    string temp = mLuaScripts[mSelectedScript];
+                    temp = temp.Replace(".lua", "");
+                    temp = temp.Replace("/", ".");
+                    string module = temp.Substring(0, temp.LastIndexOf("."));
+                    string script = temp.Substring(temp.LastIndexOf(".") + 1);
+                    mInstance.Module = module;
+                    mInstance.Script = script;
+
                     mReflects.Clear();
                     string path = mLuaScripts[mSelectedScript];
                     path = mLuaProjRoot + path;
@@ -362,9 +382,20 @@ namespace EP.U3D.EDITOR.LUA
                             }
                             else
                             {
-                                Type ftype = mUnityDLL.GetType(field.Type);
-                                if (ftype == null) ftype = mUnityUIDLL.GetType(field.Type);
-                                if (ftype == null) ftype = mMainDLL.GetType(field.Type);
+                                Type ftype = null;
+                                for (int j = 0; j < Constants.COMPONENT_REFLECT_DLLS.Count; j++)
+                                {
+                                    var dll = Constants.COMPONENT_REFLECT_DLLS[j];
+                                    if (dll != null)
+                                    {
+                                        var t = dll.GetType(field.Type);
+                                        if (t != null)
+                                        {
+                                            ftype = t;
+                                            break;
+                                        }
+                                    }
+                                }
                                 if (ftype != null && ftype.IsSubclassOf(typeof(UnityEngine.Object)))
                                 {
                                     field.OValue = EditorGUILayout.ObjectField(field.Key, field.OValue, ftype, true);
