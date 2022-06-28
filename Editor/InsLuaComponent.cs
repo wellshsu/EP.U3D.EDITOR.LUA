@@ -21,6 +21,7 @@ using EP.U3D.EDITOR.BASE;
 namespace EP.U3D.EDITOR.LUA
 {
     [CustomEditor(typeof(LuaComponent))]
+    [CanEditMultipleObjects]
     public class InsLuaComponent : Editor
     {
         private LuaComponent mInstance;
@@ -250,6 +251,7 @@ namespace EP.U3D.EDITOR.LUA
                             if (GUILayout.Button(new GUIContent(str)))
                             {
                                 mSelectedScript = i;
+                                mSearchText = "";
                             }
                         }
                     }
